@@ -1,25 +1,117 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
-function App() {
+const ImageTable = ({ selectedImages }) => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+    <div className="table-container">
+
+      <table className="styled-table">
+
+      <thead>
+
+      <tr>
+
+  <th style={{ border: '1px solid #3824ee',padding: '8px',textAlign: 'center', backgroundColor: 'lightblue' }}>Image</th>
+
+  <th style={{ border: '1px solid #3824ee',padding: '8px',textAlign: 'center', backgroundColor: 'lightblue' }}>Name</th>
+
+</tr>
+
+      </thead>
+
+      <tbody>
+
+        {selectedImages.map((image,index) => (
+
+    <tr key={index}>
+
+      <td>
+
+        <img src={image.src} alt={image.alt} style={{ maxWidth: '100px', maxheight:'100px' }} />
+
+      </td>
+
+      <td>{image.alt}</td>
+
+    </tr>
+
+  ))}
+
+      </tbody>
+
+      </table>
+
     </div>
+
+);
+
+};
+
+const App = () => {
+
+  const [selectedImages, setSelectedImages] = useState([
+
+  ]);
+
+  const handleFileUpload = (event) => {
+
+    const files = event.target.files;
+
+    for (let i = 0; i < files.length;i++) {
+
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+
+        const imageName = files[i].name;
+
+        const newImage = {
+
+          src: e.target.result,
+
+          alt: imageName,
+
+        };
+
+        setSelectedImages([...selectedImages, newImage]);
+
+      };
+
+      reader.readAsDataURL(files[i]);
+
+    }
+
+  };
+
+  return (
+
+    <div>
+
+      <div>
+
+        <h1 style={{ borderBottom: '2px solid blue', paddingTop: '20px', marginBottom: '100px'}}>
+
+          Dynamic Image Selection - Table
+
+        </h1>
+
+      </div>
+
+      <div className="upload-container">
+
+        <input type="file" onChange={handleFileUpload} multiple />
+
+        <ImageTable selectedImages={selectedImages} />
+
+        </div>
+
+        <div className='watermark'>Manoj Krishna</div>
+
+    </div>
+
   );
-}
+
+};
 
 export default App;
